@@ -84,7 +84,7 @@ Right alligned columns
 |data  |uehrgiueruighekirgh|
 
 ##Links
-[link text here](Workshops1)
+[link text here](main.html)
 [link with title](interia.pl "title text here")
 
 ##Images
