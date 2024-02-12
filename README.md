@@ -1,94 +1,44 @@
-# h1 heading
-## h2 heading
-### h3 heading
-#### h4 heading
-##### h5 heading
-###### h6 heading
+# Workshops 1
 
+Hello everyone at the first session of Workshops!
+Today we'll be focusing on threads and how they work within a shared environment.
+Let's get started!
 
-## Horizontal Rules
+## Exercise 1
 
-___
+Below is a UML of the classes needed. Please note the UML diagram may not be complete, and you're welcome to add to it as is needed.
 
-## Emphasis
+![image](https://github.com/OliwierWijas/OliwierWijas.github.io/assets/119060666/547f93f1-a2e2-4538-af0d-a721a8cf463b)
 
-**This is bold text**
-__This is bold text__
-*This is italic text*
-_This is italic text_
+Create a class, Counter, with a single private field variable, count, of type int. Initialized count to 0 in the constructor.
 
-~~Strikethrough~~
+The incrementCount method should add 1 to the count.
 
-## Blockquotes
-
-> Blockquotes can also be nested
-> >> or like that
-> >>> or like that
-
-
-## Lists
-
-Unordered
-
-+ Create a list by starting a line with '+' '-' or '*'
-+ Sub lists:
-  - Marker character...
-    * erg
-    * wrg
-  - wrgebrg
-+ orjgoenrg
-
-
-Ordered
-
-1. Wrgnrge
-2. etgjktg
-3. krngkej
-
-## Code
-
-Inline `code`
-
-Indented code
-
-  // some comments
-  line 1 of code
-  line 2 of code
-  line 3 of code
-
-Block code 'fences'
-```
-sample text here
+<blockquote>
+<details>
+<summary>Display solution for Counter Class</summary>
+  
+```java
+public class Counter
+{
+  private int count;
+  
+  public Counter()
+  {
+    this.count = 0;
+  }
+  
+  public void incrementCount()
+  {
+    count++;
+  }
+  
+  public int getCount()
+  {
+    return count;
+  }
+}
 ```
 
-Syntax highlighting
-
-``` js
-var foo = function (bar) {
-  return bar++;
-};
-
-console.log();
-```
-
-##Tables
-
-|Option|Description|
-|------|-----------|
-|data  |path to data files|
-
-Right alligned columns
-
-|Option|Description|
-|-----:|----------:|
-|data  |uehrgiueruighekirgh|
-
-##Links
-[link text here](main.html)
-[link with title](interia.pl "title text here")
-
-##Images
-
-![Minion](https://octodex.github.com/images/minion.png)
-
-## The end
+</details>
+</blockquote>
