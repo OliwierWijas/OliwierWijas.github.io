@@ -20,7 +20,7 @@
 <details>
 <summary>Display solution for the Counter class</summary>
   
-```java
+```
 public class Counter
 {
   private int count;
