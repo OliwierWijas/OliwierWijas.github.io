@@ -19,7 +19,8 @@
 <blockquote>
 <details>
 <summary>Display solution for the Counter class</summary>
-{% highlight java %}
+  
+```java
 public class Counter
 {
   private int count;
@@ -39,7 +40,7 @@ public class Counter
     return count;
   }
 }
-{% endhighlight %}
+```
 
 </details>
 </blockquote>
