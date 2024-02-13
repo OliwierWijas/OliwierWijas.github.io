@@ -85,7 +85,7 @@ public class CounterIncrementer implements Runnable
 
 <blockquote>
 <details>
-<summary>Display solution for the CounterIncrementer class</summary>
+<summary>Display solution for the Start class</summary>
   
 ```java
 public class Start
@@ -111,7 +111,7 @@ public class Start
 
 <blockquote>
 <details>
-<summary>Display solution for the CounterIncrementer class</summary>
+<summary>Display solution for the Start class</summary>
   
 ```java
 public class Start
