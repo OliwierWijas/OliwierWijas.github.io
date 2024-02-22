@@ -5,7 +5,7 @@
 <p>Today you will have one big exercise, which is about making a task management application.</p>
 <p>The idea behind it is to make a single-user Java application, which allows users to set their username, add a task and mark it as a in-progress one or done. It's very simple, but it will help you better understand basic concepts from SDJ2 so far.</p>
 [Full solution on Dominika's github](https://github.com/DominikaJanczyszyn/Workshops2Session2-MVVMObserverStatePatterns?fbclid=IwAR0d3Wzu6f9py7Pd-MmtgU1RV8bWjXM7Gizty26XL_vFlqFVrpL_NLKK3d8)
-<p>Let's get started.</p>
+<p>The exercise consists of 15 steps. Let's get started.</p>
 
 ## Exercise
 
@@ -721,7 +721,7 @@ public class StartViewController {
 </details>
 </blockquote>
 
-#### Step 11 - the AddTaskViewController class
+#### Step 12 - the AddTaskViewController class
 
 <p>This controller is very similar to the previous one. Try to figure out based on the StartViewController what should be done in each of these methods. (In onGoToOverview() method you should change the view to the ManageTasksView.fxml using the ViewFactory object.)</p>
 
@@ -774,7 +774,7 @@ public class AddTaskViewController {
 </details>
 </blockquote>
 
-#### Step 12 - the ManageTasksViewController class
+#### Step 13 - the ManageTasksViewController class
 
 <p>This class requires more knowledge about different FXML properties, therefore try to do what you can or ask us for help, but the rest you can just copy and think about the implementation, since it might be useful for your semster project.</p>
 
@@ -866,7 +866,7 @@ public class ManageTasksViewController {
 </details>
 </blockquote>
 
-#### Step 13 - the StartApplication class
+#### Step 14 - the StartApplication class
 
 <p>Create StartApplication class and make it extend Application. Overwrite the start method and inside of it make a Model interface and initialize it with a ModelManager object. After that make a ViewModelFactory object using the previously created ModelManager object. After that make a ViewHandler object and put the ViewModelFactory as a paramter. Lastly write viewHandler.start(stage);</p>
 
@@ -894,6 +894,6 @@ public class StartApplication extends Application {
 </details>
 </blockquote>
 
-#### Step 13 - THE END
+#### Step 15 - THE END
 
 It's the end for today (finally). We hope that thanks to our work, you can better understand how to develop a small Java single-user application, but if some things are still unclear do not worry about it. In case of any questions, feel free to ask.
