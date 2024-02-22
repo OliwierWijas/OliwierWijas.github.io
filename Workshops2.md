@@ -138,7 +138,7 @@ public class Done implements State {
 
 <blockquote>
 <details>
-<summary>Display solution for the Person class</summary>
+<summary>Display solution for the Task class</summary>
   
 ```java
 public class Task {
@@ -211,7 +211,17 @@ public class Task {
 
 <blockquote>
 <details>
-<summary>Display solution for the Person class</summary>
+<summary>Display solution for the ModelManager interface and class</summary>
+
+```java
+public interface Model {
+    void startTask(Task task);
+    void finishTask(Task task);
+    void addTask(Task task);
+    void addPropertyChangeListener(PropertyChangeListener listener);
+    void removePropertyChangeListener(PropertyChangeListener listener);
+}
+```
   
 ```java
 public class ModelManager implements Model {
