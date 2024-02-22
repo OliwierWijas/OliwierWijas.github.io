@@ -305,3 +305,47 @@ public class User {
 <p>When that is done, we are moving to the add method. Here you should check in try/catch, if the name property is empty, and if not then you should set the current user username with the name given. It should look like this: User.name = name.get();. Here since the name in the User class is static, we can initialize it without having a User object. Additionally, when using Properties you should always call method get() in order to get the actual value of the user input (without it you will get some object references, but it's a bit tricky and you don't need that to be happy.)</p>
 
 <p>LASTLY, finally here, we make bind methods, which will allow us to bind the values of the properties with the information displayed to the user (thanks to that we ensure consistency between those values). Use bindBidirectional() method.</p>
+
+<blockquote>
+<details>
+<summary>Display solution for the Userclass</summary>
+
+```java
+public class StartViewModel {
+    private StringProperty name;
+    private StringProperty message;
+
+    private Model model;
+
+    public StartViewModel(Model model) {
+        this.model = model;
+        this.name = new SimpleStringProperty("");
+        this.message = new SimpleStringProperty("");
+    }
+
+    public void add() {
+        try {
+
+            if (!name.get().isEmpty() && !name.get().equals("")) {
+                Person person = new Person(name.get());
+                User.name = person.getName();
+            }
+            else {
+                message.set("Fill all of the fields!");
+            }
+
+        } catch (IllegalArgumentException e) {
+            message.set("Wrong input!");
+        }
+    }
+
+    public void bindName(StringProperty property) {
+        property.bindBidirectional(name);
+    }
+    public void bindMessage(StringProperty property) {
+        property.bindBidirectional(message);
+    }
+}
+```
+</details>
+</blockquote>
