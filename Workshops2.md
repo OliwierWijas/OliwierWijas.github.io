@@ -503,7 +503,25 @@ public class ManageTasksViewModel implements PropertyChangeListener {
 <summary>Display solution for the ViewModelFactory class</summary>
 
 ```java
+public class ViewModelFactory {
+    private StartViewModel startViewModel;
+    private AddTaskViewModel addTaskViewModel;
+    private ManageTasksViewModel manageTasksViewController;
 
+
+    public ViewModelFactory(Model model){
+        this.startViewModel = new StartViewModel(model);
+        this.addTaskViewModel = new AddTaskViewModel(model);
+        this.manageTasksViewController = new ManageTasksViewModel(model);
+    }
+    public StartViewModel getStartViewModel(){
+        return startViewModel;
+    }
+    public AddTaskViewModel getAddTaskViewModel(){
+        return addTaskViewModel;
+    }
+    public ManageTasksViewModel getManageTasksViewModel(){return  manageTasksViewController;}
+}
 ```
 </details>
 </blockquote>
@@ -605,7 +623,7 @@ public class ViewFactory {
 
 <blockquote>
 <details>
-<summary>Display solution for the ViewFactory class</summary>
+<summary>Display solution for the ViewHandler class</summary>
 
 ```java
 public class ViewHandler {
@@ -658,7 +676,7 @@ public class ViewHandler {
 
 <blockquote>
 <details>
-<summary>Display solution for the ViewFactory class</summary>
+<summary>Display solution for the StartViewController class</summary>
 
 ```java
 public class StartViewController {
@@ -695,6 +713,179 @@ public class StartViewController {
 
     public Region getRoot() {
         return root;
+    }
+}
+```
+</details>
+</blockquote>
+
+#### Step 11 - the AddTaskViewController class
+
+<p>This controller is very similar to the previous one. Try to figure out based on the StartViewController what should be done in each of these methods. (In onGoToOverview() method you should change the view to the ManageTasksView.fxml using the ViewFactory object.)</p>
+
+###### Do not forget about binding in the init method!
+
+<blockquote>
+<details>
+<summary>Display solution for the AddTaskViewController class</summary>
+
+```java
+public class AddTaskViewController {
+    @FXML
+    public TextField title;
+    @FXML public TextArea description;
+    @FXML public Label message;
+    private Region root;
+    private ViewHandler viewHandler;
+    private AddTaskViewModel viewModel;
+
+    public void init(ViewHandler viewHandler, AddTaskViewModel viewModel, Region root){
+        this.root = root;
+        this.viewHandler = viewHandler;
+        this.viewModel =viewModel;
+        message.setText("");
+        title.setText("");
+        description.setText("");
+
+        viewModel.bindTitle(title.textProperty());
+        viewModel.bindDescription(description.textProperty());
+        viewModel.bindMessage(message.textProperty());
+
+    }
+    @FXML
+    public void onAdd() {
+        viewModel.add();
+    }
+    public void onGoToOverview() {
+        viewHandler.openView(ViewFactory.MANAGE);
+    }
+    public void reset() {
+        title.setText("");
+        description.setText("");
+        message.setText("");
+    }
+    public Region getRoot() {
+        return root;
+    }
+}
+```
+</details>
+</blockquote>
+
+#### Step 12 - the ManageTasksViewController class
+
+<p>This class requires more knowledge about different FXML properties, therefore try to do what you can or ask us for help, but the rest you can just copy and think about the implementation, since it might be useful for your semster project.</p>
+
+###### Especially look at the selected object (it is VERY useful for SEP2) and try to think why it is a ReadOnly object.
+
+<blockquote>
+<details>
+<summary>Display solution for the ManageTasksViewController class</summary>
+
+```java
+public class ManageTasksViewController {
+    @FXML private TableView<Task> ownTaskTableView;
+    @FXML private TableColumn<Task, String> ownTaskTitle;
+    @FXML private TableColumn<Task, String> ownTaskDescription;
+    @FXML private TableColumn<Task, String> ownTaskStatus;
+
+    @FXML private TableView<Task> taskTableView;
+    @FXML private TableColumn<Task, String> taskTitle;
+    @FXML private TableColumn<Task, String> taskDescription;
+    @FXML private TableColumn<Task, Person> taskCreatedBy;
+    @FXML private TableColumn<Task, State> taskStatus;
+
+    @FXML private Button startButton;
+    @FXML private Button finishButton;
+    private Region root;
+    private ViewHandler viewHandler;
+    private ManageTasksViewModel viewModel;
+
+    private ReadOnlyObjectProperty<Task> selected;
+
+
+
+    public void init(ViewHandler viewHandler, ManageTasksViewModel viewModel, Region root)
+    {
+        this.viewHandler = viewHandler;
+        this.viewModel = viewModel;
+        this.root = root;
+
+        viewModel.bindOwnTasks(ownTaskTableView.itemsProperty());
+        this.ownTaskTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        this.ownTaskDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        this.ownTaskStatus.setCellValueFactory(new PropertyValueFactory<>("state"));
+        this.selected = ownTaskTableView.getSelectionModel().selectedItemProperty();
+        this.viewModel.bindSelected(selected);
+
+        viewModel.bindTasks(taskTableView.itemsProperty());
+        this.taskTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        this.taskDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        this.taskCreatedBy.setCellValueFactory(new PropertyValueFactory<>("person"));
+        this.taskStatus.setCellValueFactory(new PropertyValueFactory<>("state"));
+    }
+
+    @FXML
+    public void goToAdd() {
+        viewHandler.openView(ViewFactory.ADD);
+    }
+
+    @FXML
+    public void onStart() {
+        viewModel.startTask();
+    }
+
+    @FXML
+    public void onFinish() {
+        viewModel.finishTask();
+    }
+
+    @FXML
+    public void onSelect() {
+        if(selected.get().getState() instanceof NotStarted) {
+            finishButton.setDisable(true);
+            startButton.setDisable(false);
+        }
+        if(selected.get().getState() instanceof InProgress) {
+            startButton.setDisable(true);
+            finishButton.setDisable(false);
+        }
+        if(selected.get().getState() instanceof Done) {
+            finishButton.setDisable(true);
+            startButton.setDisable(true);
+        }
+    }
+
+    public Region getRoot() {
+        return root;
+    }
+}
+```
+</details>
+</blockquote>
+
+#### Step 13 - the StartApplication class
+
+<p>Create StartApplication class and make it extend Application. Overwrite the start method and inside of it make a Model interface and initialize it with a ModelManager object. After that make a ViewModelFactory object using the previously created ModelManager object. After that make a ViewHandler object and put the ViewModelFactory as a paramter. Lastly write viewHandler.start(stage);</p>
+
+<p>Make a main method and put launch() inside.</p>
+
+<blockquote>
+<details>
+<summary>Display solution for the ManageTasksViewController class</summary>
+
+```java
+public class StartApplication extends Application {
+    @Override
+    public void start(Stage stage) throws IOException {
+        Model model = new ModelManager();
+        ViewModelFactory viewModelFactory = new ViewModelFactory(model);
+        ViewHandler viewHandler = new ViewHandler(viewModelFactory);
+        viewHandler.start(stage);
+    }
+
+    public static void main(String[] args) {
+        launch();
     }
 }
 ```
