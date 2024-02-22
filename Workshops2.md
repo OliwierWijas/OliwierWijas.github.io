@@ -352,7 +352,7 @@ public class StartViewModel {
 
 #### Step 6 - the AddTaskViewModel class
 
-<p>Here I won't talk that much, since it is very similar to the previous viewmodel (atleast the properties and the binding methods).</p>
+<p>Here I won't talk that much here, since this class is very similar to the previous viewmodel (atleast the properties and the binding methods). As before, open the AddTaskView.fxml file to get to know what is expected to be done.</p>
 
 <p>I will only focus on the add() method. In this method, once again, you should make a try/catch clause and within it, you should check if the title and the description properties are empty or null. If not, then create a Person object taking name for it from the User class (you can use just User.name). After that, you create a Task object with the newly created person object and the information taken from the properties. Lastly, you call a proper ModelManager method in order to add a task to its arrayList. In the end, set the message property to a proper information message for the user.</p>
 
@@ -405,3 +405,92 @@ public class AddTaskViewModel {
 ```
 </details>
 </blockquote>
+
+#### Step 7 - the ManageTasksViewModel class
+
+<p>This viewmodel will be responsible for displaying our tasks as well as all other tasks in the system (look at ManageTasksView.fxml to understand better). Since, here the displayed data can change and we want our view to be always up to date, we need to continue the implementation of the observer pattern. Before the ModelManager class was the class that other ones listen to and now the ManageTasksViewModel will need to be a listener for that class, therefore make sure that it implements PropertyChangeListener interface and the propertyChange method.</p>
+
+<p>Here also, I won't talk much about declaring the properties, just follow the UML diagram, it is very similar to the previous viewmodels.</p>
+
+<p>Make a constructor, where you initalize all properties and remember to add this class as a listener to the model object in order to indicate that this class should listen to the fired events from the layer below.</p>
+
+<p>For start and finish methods, once again in try/catch clause, you need to check if the properties are not null or empty (use get() function on them to get the value as I said before), and then call a proper method from the ModelManager class using the model object.</p>
+
+<p>In binding, now do not use bidirectional binding, here we would want to unidirectionally bind our tasks lists to the given properties and for the bindSelected method, you need to bind the property to the task property declared in the beginning.</p>
+
+<p>Here bindSelected() method might be something new for you. It does not need to be called like this, but I want to highlight how we will use it. Basically, the method is responsible for binding the object that we selected in the list in the view, so that the program will now on which object to run a method.</p>
+
+<p>In the end, in the propertyChange() method, if the event name is "List" (as we declared in the Model), convert the object to an arrayList of tasks and add all tasks to the tasks ListProperty, additionally, add all tasks of the current user to the ownTasks ListProperty.</p>
+
+###### Remember to use Platform.runLater(() -> {}) method in the propertyChange method in order to avoid concurrency (synchronization) issues between the application and the JavaFX thread. You don't need to fully understand it for now. Just use the given method and ask us, if you encounter any problems, since lambda expressions might be new for you. :)
+
+<blockquote>
+<details>
+<summary>Display solution for the ManageTasksViewModel class</summary>
+
+```java
+public class ManageTasksViewModel implements PropertyChangeListener {
+    private StringProperty message;
+    private final ListProperty<Task> tasks;
+    private final ListProperty<Task> ownTasks;
+    private ObjectProperty<Task> task;
+    private Model model;
+
+
+    public ManageTasksViewModel(Model model) {
+        this.model = model;
+        this.message = new SimpleStringProperty("");
+        this.tasks = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.ownTasks = new SimpleListProperty<>(FXCollections.observableArrayList());
+        this.task = new SimpleObjectProperty<>();
+        model.addPropertyChangeListener(this);
+    }
+
+    public void startTask() {
+        try {
+            if (task.get() != null)
+                model.startTask(task.get());
+        } catch (Error e) {
+            message.set(e.getMessage());
+        }
+    }
+    public void finishTask(){
+        try {
+            if (task.get() != null)
+                model.finishTask(task.get());
+        } catch (Error e) {
+            message.set(e.getMessage());
+        }
+    }
+
+    public void bindTasks(ObjectProperty<ObservableList<Task>> property) {
+        property.bind(tasks);
+    }
+    public void bindSelected(ReadOnlyObjectProperty<Task> property) {
+        task.bind(property);
+    }
+
+    public void bindOwnTasks(ObjectProperty<ObservableList<Task>> property) {
+        property.bind(ownTasks);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        Platform.runLater(() -> { if (evt.getPropertyName().equals("List"))
+        {
+            ArrayList<Task> temp = ((ArrayList<Task>)evt.getNewValue());
+            tasks.clear();
+            temp.forEach(task -> tasks.add(task));
+            ownTasks.clear();
+            temp.forEach(task -> {
+                if(task.getPerson().getName().equals(User.name))
+                    ownTasks.add(task);
+            });
+        }
+        });
+    }
+}
+```
+</details>
+</blockquote>
+
