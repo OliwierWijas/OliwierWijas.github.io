@@ -645,3 +645,58 @@ public class ViewHandler {
 </blockquote>
 
 #### Step 11 - the StartViewController class
+
+<p>Here we need to fields with FXML annotation (@FXML before accessor annotation), those are TextField name and Label message. Additionally, as in every controller, we need a Region object called root, a ViewHandler and a StartViewModel objects.</p>
+
+<p>We need an init() method, which works kinda like a constructor (it initalizes view, once the application is started). Inside of it, you should initalize all the objects and bind the FXML objects with the ones in viewModel by using the bind methods that we implemented priorly. (Tip: do not bind objects, but their values by using textProperty() method on them.)</p>
+
+<p>After this we need a onOk() method (also with FXML annotation, since we will use it on a button). This method should call a method add() from the viewModel and change the view to AddTaskView.</p>
+
+<p>The reset method should set the FXML fields to an empty string.</p>
+
+<p>The getRoot() method should return the root.</p>
+
+<blockquote>
+<details>
+<summary>Display solution for the ViewFactory class</summary>
+
+```java
+public class StartViewController {
+    @FXML
+    public TextField name;
+    @FXML public Label message;
+    private Region root;
+    private ViewHandler viewHandler;
+    private StartViewModel viewModel;
+
+    public void init(ViewHandler viewHandler, StartViewModel viewModel, Region root) {
+        this.root = root;
+        this.viewHandler = viewHandler;
+        this.viewModel =viewModel;
+        message.setText("");
+        name.setText("");
+
+        viewModel.bindName(name.textProperty());
+        viewModel.bindMessage(message.textProperty());
+
+    }
+
+    @FXML
+    public void onOK() {
+        viewModel.add();
+        viewHandler.openView(ViewFactory.ADD);
+
+    };
+
+    public void reset() {
+        message.setText("");
+        name.setText("");
+    }
+
+    public Region getRoot() {
+        return root;
+    }
+}
+```
+</details>
+</blockquote>
