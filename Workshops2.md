@@ -494,3 +494,154 @@ public class ManageTasksViewModel implements PropertyChangeListener {
 </details>
 </blockquote>
 
+#### Step 8 - the ViewModelFactory class
+
+<p>This class is responsible for making sure there is only one ViewModel of each type in the system. You need to have a reference to each of the viewmodels created, initialize them in the constructor and provide getter methods that we will use in order to access those ViewModel objects.</p>
+
+<blockquote>
+<details>
+<summary>Display solution for the ViewModelFactory class</summary>
+
+```java
+
+```
+</details>
+</blockquote>
+
+#### Step 9 - the ViewFactory class
+
+<p>Now we are moving on to the View layer. We will start with the ViewFactory class.</p>
+
+<p>Here also you do not need to fully understand this class. I remember I was struggling with it on the second semester. You can try to write it on your own looking at Ole's examples and by trying to figure out which views will be used, if not you can simply copy the class from down below.</p>
+
+###### You can have an error, because the ViewHandler as well as controllers class are not yet created, we will fix it in the next steps.
+
+<blockquote>
+<details>
+<summary>Display solution for the ViewFactory class</summary>
+
+```java
+public class ViewFactory {
+    public static final String ADD = "add";
+    public static final String MANAGE = "manage";
+    public static final String START = "start";
+
+    private final ViewHandler viewHandler;
+    private final ViewModelFactory viewModelFactory;
+    private StartViewController startViewController;
+    private ManageTasksViewController manageTasksViewController;
+    private AddTaskViewController addTaskViewController;
+
+    public ViewFactory(ViewHandler viewHandler, ViewModelFactory viewModelFactory) {
+        this.viewHandler = viewHandler;
+        this.viewModelFactory = viewModelFactory;
+        this.startViewController = null;
+        this.manageTasksViewController = null;
+        this.addTaskViewController = null;
+    }
+    public Region loadStartView() {
+        if (startViewController == null) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/com/example/workshops2session2/StartView.fxml"));
+            try {
+                Region root = loader.load();
+                startViewController = loader.getController();
+                startViewController.init(viewHandler, viewModelFactory.getStartViewModel(), root);
+            } catch (IOException e) {
+                throw new IOError(e);
+            }
+        }
+        startViewController.reset();
+        return startViewController.getRoot();
+    }
+    public Region loadAddTaskView() {
+        if (addTaskViewController == null) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/com/example/workshops2session2/AddTaskView.fxml"));
+            try {
+                Region root = loader.load();
+                addTaskViewController = loader.getController();
+                addTaskViewController.init(viewHandler, viewModelFactory.getAddTaskViewModel(), root);
+            } catch (IOException e) {
+                throw new IOError(e);
+            }
+        }
+        addTaskViewController.reset();
+        return addTaskViewController.getRoot();
+    }
+    public Region loadManageVinylsView() {
+        if (manageTasksViewController == null) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/com/example/workshops2session2/ManageTasksView.fxml"));
+            try {
+                Region root = loader.load();
+                manageTasksViewController = loader.getController();
+                manageTasksViewController.init(viewHandler, viewModelFactory.getManageTasksViewModel(), root);
+            } catch (IOException e) {
+                throw new IOError(e);
+            }
+        }
+        manageTasksViewController.reset();
+        return manageTasksViewController.getRoot();
+    }
+
+
+    public Region loadView(String id) {
+        return switch (id) {
+            case START -> loadStartView();
+            case ADD -> loadAddTaskView();
+            case MANAGE -> loadManageVinylsView();
+            default -> throw new IllegalArgumentException("Unknown view: " + id);
+        };
+    }
+}
+```
+</details>
+</blockquote>
+
+#### Step 10 - the ViewHandler class
+
+<p>The same as in the ViewFactory case, you do not need to fully understand the code, just copy it and don't worry about it. This class is responsible for changing scenes for example when a button is clicked etc.</p>
+
+<blockquote>
+<details>
+<summary>Display solution for the ViewFactory class</summary>
+
+```java
+public class ViewHandler {
+    private final Scene currentScene;
+    private Stage primaryStage;
+    private final ViewFactory viewFactory;
+
+    public ViewHandler(ViewModelFactory viewModelFactory) {
+        this.viewFactory = new ViewFactory(this, viewModelFactory);
+        this.currentScene = new Scene(new Region());
+    }
+
+    public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        openView(ViewFactory.START);
+    }
+
+    public void openView(String id) {
+        Region root = viewFactory.loadView(id);
+        currentScene.setRoot(root);
+        if (root.getUserData() == null) {
+            primaryStage.setTitle("");
+        } else {
+            primaryStage.setTitle(root.getUserData().toString());
+        }
+        primaryStage.setScene(currentScene);
+        primaryStage.sizeToScene();
+        primaryStage.show();
+    }
+
+    public void closeView() {
+        primaryStage.close();
+    }
+}
+```
+</details>
+</blockquote>
+
+#### Step 11 - the StartViewController class
