@@ -11,7 +11,9 @@
 
 ![image](https://github.com/OliwierWijas/OliwierWijas.github.io/assets/119060666/1c7a581f-9b38-40dd-83e9-34ccdbbe0962)
 
-##### Before starting remember to keep track of the module-info.java file in order to include important libraries and to export proper packages if needed.
+##### Before starting remember to keep track of the module-info.java file in order to include important libraries and to export proper packages if needed!
+
+##### Also remember that even though we give you full implementation of the needed classes, you can still ask questions if something is unclear to you, especially about the new topics including: the Observer pattern, the State pattern and the MVVM pattern.
 
 #### Step 1 - the Person class
 
@@ -196,4 +198,71 @@ public class Task {
 </blockquote>
 
 #### Step 4 - the ModelManager interface and implementation
+
+<p>Here besides a basic class, we will combine it with the use of the Observer pattern. The Observer pattern will be used in order to send notifications to the View, informing that a change has happened, and to send an updated object to the upper layers of our architecture, so that the object with new data will be displayed.</p>
+
+<p>Firstly, implement the Model interface with the methods given in the UML diagram. Remember that in interfaces our methods do not need access modifiers (e.g. public, protected, private).</p>
+
+<p>After you have done the Model interface, make a ModelManager class, which implements the Model interface and the methods it has.</p>
+
+<p>In order to make our Observer pattern to be working, we need a PropertyChangeSupport support object, that is responsible for informing observers about occuring changed, and two methods: addPropertyChangeListener() and removerPropertyChangeListener(), that are used in order to add or remove observers of the ModelManager class.</p>
+
+###### Think about when firePropertyChange() method should be used and where it would be necessary to inform upper layers about possible changes (tip: it is usually necessary when we add, modify or remove data stored)!
+
+<blockquote>
+<details>
+<summary>Display solution for the Person class</summary>
+  
+```java
+public class ModelManager implements Model {
+    private ArrayList<Task> tasks;
+    private final PropertyChangeSupport support;
+
+    public ModelManager() {
+        this.tasks = new ArrayList<>();
+        this.support = new PropertyChangeSupport(tasks);
+    }
+
+    @Override
+    public synchronized void startTask(Task task) {
+        try {
+            task.startTask();
+            support.firePropertyChange("List", null, tasks);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public synchronized void finishTask(Task task) {
+        try {
+            task.finishTask();
+            support.firePropertyChange("List", null, tasks);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public synchronized void addTask(Task task) {
+        tasks.add(task);
+        support.firePropertyChange("List", null, tasks);
+
+    }
+
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
+    }
+}
+```
+
+</details>
+</blockquote>
 
