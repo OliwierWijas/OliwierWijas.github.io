@@ -276,3 +276,32 @@ public class ModelManager implements Model {
 </details>
 </blockquote>
 
+#### Step 5 - the StartViewModel class
+
+<p>Right now we are moving to the first upper layer, which is the ViewModel layer. The ViewModel layer is a layer, which is responsible for connecting two other layers : Model and View, and that is why it combines both objects that can be usually seen in View and the ones from our Model.</p>
+
+<p>We will start with the StartViewModel class. Maybe in order to better understand what is going on, you can at first open the StartView.fxml file given by us to visualize the thing we will be working on.</p>
+
+<p>This class is responsible for taking the user username and storing it in the system, so that we can identify who enters new tasks. I would recommend to start with a class that is not on the diagram, but is pretty simple. It will be the User class, which we will use only to store the username of the current user. This class should only contain statis String called name.</p>
+
+<blockquote>
+<details>
+<summary>Display solution for the Userclass</summary>
+
+```java
+public class User {
+    public static String name;
+}
+```
+</details>
+</blockquote>
+
+<p>Now, when we have a place where to store the username of the current user, we can progress into making a viewcontroller for the StartView.fxml. Therefore, we would need a name StringProperty. I don't know if these Properties are new for you, but you need to get to know with them, since they are widely used in SDJ2 course and I am sure you will need them in your SEP2 project. Those are basically objects that are used in View and allow us to convert user input into our own classes/objects.</p>
+
+<p>Once the StringProperty name is added, we need to have another StringProperty message, which will be used to display any errors to the user. Lastly, we need a reference to the Model interface.</p>
+
+<p>Make a simple constructor, where you intialize the Model object with the one given as a parameter and where you intialize StringProperty references with SimpleStringProperty empty objects.</p>
+
+<p>When that is done, we are moving to the add method. Here you should check in try/catch, if the name property is empty, and if not then you should set the current user username with the name given. It should look like this: User.name = name.get();. Here since the name in the User class is static, we can initialize it without having a User object. Additionally, when using Properties you should always call method get() in order to get the actual value of the user input (without it you will get some object references, but it's a bit tricky and you don't need that to be happy.)</p>
+
+<p>LASTLY, finally here, we make bind methods, which will allow us to bind the values of the properties with the information displayed to the user (thanks to that we ensure consistency between those values). Use bindBidirectional() method.</p>
