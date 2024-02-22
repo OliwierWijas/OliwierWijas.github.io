@@ -3,6 +3,8 @@
 <p>Hello everyone at the second session of Workshops!</p>
 <p>Today we'll be focusing on MVVM pattern combined with the State and Observer patterns.</p>
 <p>Today you will have one big exercise, which is about making a task management application.</p>
+<p>The idea behind it is to make a single-user Java application, which allows users to set their username, add a task and mark it as a in-progress one or done. It's very simple, but it will help you better understand basic concepts from SDJ2 so far.</p>
+[Full solution on Dominika's github](https://github.com/DominikaJanczyszyn/Workshops2Session2-MVVMObserverStatePatterns?fbclid=IwAR0d3Wzu6f9py7Pd-MmtgU1RV8bWjXM7Gizty26XL_vFlqFVrpL_NLKK3d8)
 <p>Let's get started.</p>
 
 ## Exercise
