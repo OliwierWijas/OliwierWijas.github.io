@@ -308,7 +308,7 @@ public class User {
 
 <blockquote>
 <details>
-<summary>Display solution for the Userclass</summary>
+<summary>Display solution for the StartViewModel class</summary>
 
 ```java
 public class StartViewModel {
@@ -341,6 +341,62 @@ public class StartViewModel {
 
     public void bindName(StringProperty property) {
         property.bindBidirectional(name);
+    }
+    public void bindMessage(StringProperty property) {
+        property.bindBidirectional(message);
+    }
+}
+```
+</details>
+</blockquote>
+
+#### Step 6 - the AddTaskViewModel class
+
+<p>Here I won't talk that much, since it is very similar to the previous viewmodel (atleast the properties and the binding methods).</p>
+
+<p>I will only focus on the add() method. In this method, once again, you should make a try/catch clause and within it, you should check if the title and the description properties are empty or null. If not, then create a Person object taking name for it from the User class (you can use just User.name). After that, you create a Task object with the newly created person object and the information taken from the properties. Lastly, you call a proper ModelManager method in order to add a task to its arrayList. In the end, set the message property to a proper information message for the user.</p>
+
+<blockquote>
+<details>
+<summary>Display solution for the StartViewModel class</summary>
+
+```java
+public class AddTaskViewModel {
+    private StringProperty title;
+    private StringProperty description;
+    private StringProperty message;
+
+    private Model model;
+
+    public AddTaskViewModel(Model model) {
+        this.model = model;
+        this.title = new SimpleStringProperty("");
+        this.description = new SimpleStringProperty("");
+        this.message = new SimpleStringProperty("");
+    }
+
+    public void add() {
+        try {
+
+            if (!title.get().isEmpty() && !title.get().equals("") && !description.get().isEmpty() && !description.get().equals("")){
+                Person person = new Person(User.name);
+                Task task = new Task(title.get(), description.get(), person);
+                model.addTask(task);
+                message.set("You added new Task: \n" + task);
+            }
+            else{
+                message.set("Fill all of the fields!");
+            }
+
+        } catch (IllegalArgumentException e) {
+            message.set("Wrong input!");
+        }
+    }
+    public void bindTitle(StringProperty property) {
+        property.bindBidirectional(title);
+    }
+    public void bindDescription(StringProperty property) {
+        property.bindBidirectional(description);
     }
     public void bindMessage(StringProperty property) {
         property.bindBidirectional(message);
