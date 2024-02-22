@@ -48,7 +48,7 @@ public class Person {
 </details>
 </blockquote>
 
-#### Step 1 - the State pattern
+#### Step 2 - the State pattern
 
 <p>After the Person class has been implemented, we can move on to the implementation of the State Pattern.</p>
 
@@ -127,3 +127,73 @@ public class Done implements State {
 
 </details>
 </blockquote>
+
+#### Step 3 - the Task class
+
+<p>The same as in the Person class, I believe you do not need any additional assistance. You have done more complecated stuff in SDJ1. :)</p>
+
+<p>The only things you can encounter problems on are the start and finish methods. Basically you should call a corresponding method on the state object you have a reference to (those are the methods that we created in the State pattern).</p>
+
+<blockquote>
+<details>
+<summary>Display solution for the Person class</summary>
+  
+```java
+public class Task {
+    private final String title;
+    private final String description;
+    private State state;
+    private Person person;
+
+    public Task(String title, String description, Person creator) {
+        this.title = title;
+        this.description = description;
+        this.state = new NotStarted();
+        this.person = creator;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void startTask() {
+        state.startTask(this);
+    }
+    
+    public void finishTask() {
+        state.finishTask(this);
+    }
+    
+    public boolean equals(Object obj) {
+        if(obj == null || obj.getClass()!= getClass()) return false;
+        Task p = (Task) obj;
+        return p.getTitle().equals(this.getTitle()) && p.getDescription().equals(this.getDescription()) && p.getState().equals(this.getState()) && p.getPerson().equals(this.getPerson());
+    }
+
+    public String toString() {
+        return title+": " +description;
+    }
+}
+```
+
+</details>
+</blockquote>
+
+#### Step 4 - the ModelManager interface and implementation
+
