@@ -891,3 +891,7 @@ public class StartApplication extends Application {
 ```
 </details>
 </blockquote>
+
+#### Step 13 - THE END
+
+It's the end for today (finally). We hope that thanks to our work, you can better understand how to develop a small Java single-user application, but if some things are still unclear do not worry about it. In case of any questions, feel free to ask.
