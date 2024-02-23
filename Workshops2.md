@@ -16,7 +16,7 @@
 
 <p>Below is a UML of the classes needed. Please note the UML diagram may not be complete, and you're welcome to add to it as is needed.</p>
 
-![image](https://github.com/OliwierWijas/OliwierWijas.github.io/assets/119060666/1c7a581f-9b38-40dd-83e9-34ccdbbe0962)
+![image](https://github.com/OliwierWijas/OliwierWijas.github.io/assets/119060666/13dd760a-e702-4126-8f9a-7a7bf416047a)
 
 ##### Before starting remember to keep track of the module-info.java file in order to include important libraries and to export proper packages if needed!
 
