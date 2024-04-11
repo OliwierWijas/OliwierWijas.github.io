@@ -104,3 +104,36 @@ public class RemoteConnector implements Connector {
 
 </details>
 </blockquote>
+
+### Step 3 - Implementing the ServerStart Class
+
+<p>We have implemented all the essential functionalities within the server domain. Now, let's implement the class responsible for starting the server - <code>ServerStart</code>.</p>
+
+<p>To start the RMI server, we need to:</p>
+
+1. Create a <code>Registry</code> at a specified port number.
+2. Make a <code>RemoteConnector</code> object.
+3. Initialize a new <code>Remote</code> object by calling the <code>UnicastRemoteObject.exportObject()</code> method with the previously created <code>RemoteConnector</code> object and 0 port number as parameters.
+4. Bind the <code>Remote</code> object with a given name in the registry.
+5. (Optionally) Print out that the server is running.
+
+<blockquote>
+<details>
+<summary>Display solution for the Connector interface</summary>
+  
+```java
+public class ServerStart
+{
+    public static void main(String[] args) throws RemoteException, AlreadyBoundException
+    {
+        Registry registry = LocateRegistry.createRegistry(8080);
+        RemoteConnector remoteConnector = new RemoteConnector();
+        Remote remote = UnicastRemoteObject.exportObject(remoteConnector, 0);
+        registry.bind("rmiServer", remote);
+        System.out.println("Server running");
+    }
+}
+```
+
+</details>
+</blockquote>
