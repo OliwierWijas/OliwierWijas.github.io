@@ -20,7 +20,7 @@
 
 ##### Also remember that even though we give you full implementation of the needed classes, you can still ask questions if something is unclear to you, especially about the new topic: Remote Method Invocation.
 
-#### Step 5 - the Connector Remote Interface
+### Step 1 - the Connector Remote Interface
 
 <p>In order to start working on a server we need to make an interface of it, in this case we call it - <code>Connector</code></p>
 <p>Implement the <code>Connector</code> class from the class diagram. Besides basic methods that are needed for the logic of the system, we need the <code>addRemotePropertyChangeListener</code> method, which was done by Ole and allows for using the Observer pattern remotely. In order to be able to use the package that includes the RemoteObserver, you need to take it from your SDJ2 course and add to the project.</p>
