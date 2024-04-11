@@ -20,7 +20,7 @@
 
 ##### Also remember that even though we give you full implementation of the needed classes, you can still ask questions if something is unclear to you, especially about the new topic: Remote Method Invocation.
 
-#### Step 1 - the Connector Remote Interface
+#### Step 5 - the Connector Remote Interface
 
 <p>In order to start working on a server we need to make an interface of it, in this case we call it - <code>Connector</code></p>
 <p>Implement the <code>Connector</code> class from the class diagram. Besides basic methods that are needed for the logic of the system, we need the <code>addRemotePropertyChangeListener</code> method, which was done by Ole and allows for using the Observer pattern remotely. In order to be able to use the package that includes the RemoteObserver, you need to take it from your SDJ2 course and add to the project.</p>
@@ -161,12 +161,11 @@ public class ClientImpl extends UnicastRemoteObject implements Client , RemotePr
   private final PropertyChangeSupport support;
 
 
-  public ClientImpl(Connector connector) throws RemoteException
-  {
-    this.connector = connector;
-    this.support = new PropertyChangeSupport(this);
-    this.connector.addRemotePropertyChangeListener(this);
-  }
+    public ModelManager(Client client) throws RemoteException {
+        this.client = client;
+        this.client.addPropertyChangeListener(this);
+        this.support = new PropertyChangeSupport(this);
+    }
 
   @Override public ArrayList<Task> getTasks() throws RemoteException
   {
@@ -217,6 +216,41 @@ public class ClientImpl extends UnicastRemoteObject implements Client , RemotePr
         this.support.firePropertyChange("List", null, event.getNewValue());
     });
   }
+}
+```
+
+</details>
+</blockquote>
+
+### Step 5 - Modifying the StartApplication Class
+
+<p>To start the client instead of what we did previously, we need to:</p>
+
+1. Get a <code>Registry</code> from the specified on the server side port number.
+2. Look up for a remote object in the registry with the bound name and cast it to a <code>Connector</code>.
+3. Create a <code>Client</code> object with the created <code>Connector</code> object given as a parameter.
+4. Initialize the rest of the application as before, but with the new client given as a parameter.
+
+<blockquote>
+<details>
+<summary>Display solution for the Connector interface</summary>
+  
+```java
+public class StartApplication extends Application {
+    @Override
+    public void start(Stage stage) throws IOException, NotBoundException {
+        Registry registry = LocateRegistry.getRegistry(8080);
+        Connector connector = (Connector) registry.lookup("rmiServer");
+        Client client = new ClientImpl(connector);
+        Model model = new ModelManager(client);
+        ViewModelFactory viewModelFactory = new ViewModelFactory(model);
+        ViewHandler viewHandler = new ViewHandler(viewModelFactory);
+        viewHandler.start(stage);
+    }
+
+    public static void main(String[] args) {
+        launch();
+    }
 }
 ```
 
