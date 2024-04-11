@@ -20,7 +20,7 @@
 
 ##### Also remember that even though we give you full implementation of the needed classes, you can still ask questions if something is unclear to you, especially about the new topic: Remote Method Invocation.
 
-#### Step 1 - the Connector remote interface
+#### Step 1 - the Connector Remote Interface
 
 <p>In order to start working on a server we need to make an interface of it, in this case we call it - <code>Connector</code></p>
 <p>Implement the <code>Connector</code> class from the class diagram. Besides basic methods that are needed for the logic of the system, we need the <code>addRemotePropertyChangeListener</code> method, which was done by Ole and allows for using the Observer pattern remotely. In order to be able to use the package that includes the RemoteObserver, you need to take it from your SDJ2 course and add to the project.</p>
@@ -36,6 +36,69 @@ public interface Connector extends Remote {
     void finishTask(Task task) throws RemoteException;
     void addTask(Task task) throws RemoteException;
     void addRemotePropertyChangeListener(RemotePropertyChangeListener listener) throws RemoteException;
+}
+```
+
+</details>
+</blockquote>
+
+### Step 2 - The RemoteConnector Class
+
+<p>Right now we need to implement the previously created interface and the methods it includes. Do that based on the class diagram.</p>
+<p>Remember to use the RemotePropertyChangeSupport object in order to fire events to notify clients about necessary data updates.</p>
+
+<blockquote>
+<details>
+<summary>Display solution for the Connector interface</summary>
+  
+```java
+public class RemoteConnector implements Connector {
+    private final ArrayList<Task> tasks;
+    private final RemotePropertyChangeSupport support;
+
+    public RemoteConnector(){
+        this.tasks = new ArrayList<>();
+        this.support = new RemotePropertyChangeSupport();
+    }
+    @Override
+    public ArrayList<Task> getTasks() throws RemoteException {
+        return tasks;
+    }
+
+    @Override
+    public void startTask(Task task) throws RemoteException {
+        for (int i = 0; i < tasks.size(); i++)
+        {
+            if (tasks.get(i).equals(task)) {
+                tasks.get(i).startTask();
+                break;
+            }
+        }
+        this.support.firePropertyChange("List", null, tasks);
+    }
+
+    @Override
+    public void finishTask(Task task) throws RemoteException {
+        for (int i = 0; i < tasks.size(); i++)
+        {
+            if (tasks.get(i).equals(task)) {
+                tasks.get(i).finishTask();
+                break;
+            }
+        }
+        this.support.firePropertyChange("List", null, tasks);
+    }
+
+    @Override
+    public void addTask(Task task) throws RemoteException {
+        tasks.add(task);
+        this.support.firePropertyChange("List", null, tasks);
+    }
+
+    @Override
+    public void addRemotePropertyChangeListener(RemotePropertyChangeListener listener) throws RemoteException {
+        this.support.addPropertyChangeListener(listener);
+    }
 }
 ```
 
