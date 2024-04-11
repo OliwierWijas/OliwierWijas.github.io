@@ -256,3 +256,6 @@ public class StartApplication extends Application {
 
 </details>
 </blockquote>
+
+## Now your application is ready!
+<p>To test it, start the server first. Then, run multiple clients and observe if the tasks change for each client.</p>
