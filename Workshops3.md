@@ -113,7 +113,7 @@ public class RemoteConnector implements Connector {
 
 1. Create a <code>Registry</code> at a specified port number.
 2. Make a <code>RemoteConnector</code> object.
-3. Initialize a new <code>Remote</code> object by calling the <code>UnicastRemoteObject.exportObject()</code> method with the previously created <code>RemoteConnector</code> object and 0 port number as parameters.
+3. Initialize a new <code>Remote</code> object by calling the <code>UnicastRemoteObject.exportObject()</code> method with the previously created <code>RemoteConnector</code> object and 0 port number given as parameters.
 4. Bind the <code>Remote</code> object with a given name in the registry.
 5. (Optionally) Print out that the server is running.
 
@@ -132,6 +132,91 @@ public class ServerStart
         registry.bind("rmiServer", remote);
         System.out.println("Server running");
     }
+}
+```
+
+</details>
+</blockquote>
+
+### Step 4 - Implementing the Client Class
+
+<p>Our <code>Client</code> interface that we implemented some weeks ago can stay the same, since we still need the same methods, only their implementation will change.</p>
+
+<p>Our <code>ClientImpl</code> class needs to extend the <code>UnicastRemoteObject</code> class and implement both the <code>Client</code> and <code>RemotePropertyChangeListener</code> interfaces (the second one enables the <code>ClientImpl</code> class to get notified about fired events from the server over the network).</p>
+
+<p>Now our client class takes the <code>Connector</code> server interface as a parameter, so that it can use it as a local object, even though they can be located on the other sides of the world.</p>
+
+<p>Implement the methods that the <code>ClientImpl</code> class needs to have. It is very simple, since in most cases you only call appropriate methods on the remote <code>Connector</code> object as if they were local.</p>
+
+<p>Remember to appropriately react to fired events and make sure to inform the upper layers of the client side about them. Don't forget to use <code>Platform.runLater()</code> method, which is needed for making observing adaptable with JavaFX.</p>
+
+<blockquote>
+<details>
+<summary>Display solution for the Connector interface</summary>
+  
+```java
+public class ClientImpl extends UnicastRemoteObject implements Client , RemotePropertyChangeListener
+{
+  private final Connector connector;
+  private final PropertyChangeSupport support;
+
+
+  public ClientImpl(Connector connector) throws RemoteException
+  {
+    this.connector = connector;
+    this.support = new PropertyChangeSupport(this);
+    this.connector.addRemotePropertyChangeListener(this);
+  }
+
+  @Override public ArrayList<Task> getTasks() throws RemoteException
+  {
+    try{
+      return connector.getTasks();
+    }catch (Exception e){
+      throw new IllegalArgumentException(e);
+    }
+  }
+
+  @Override public void startTask(Task task) throws RemoteException
+  {
+    try{
+      connector.startTask(task);
+    }catch (Exception e){
+      throw new IllegalArgumentException(e);
+    }
+  }
+
+  @Override public void finishTask(Task task) throws RemoteException
+  {
+    try{
+      connector.finishTask(task);
+    }catch (Exception e){
+      throw new IllegalArgumentException(e);
+    }
+  }
+
+  @Override public void addTask(Task task) throws RemoteException
+  {
+    try{
+      connector.addTask(task);
+    }catch (Exception e){
+      throw new IllegalArgumentException(e);
+    }
+  }
+
+  @Override public void addPropertyChangeListener (
+      PropertyChangeListener listener)
+  {
+    this.support.addPropertyChangeListener(listener);
+  }
+
+  @Override
+  public void propertyChange(RemotePropertyChangeEvent event) throws RemoteException {
+    Platform.runLater(()->{
+      if (event.getPropertyName().equals("List"))
+        this.support.firePropertyChange("List", null, event.getNewValue());
+    });
+  }
 }
 ```
 
