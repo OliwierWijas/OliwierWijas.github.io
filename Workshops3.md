@@ -8,13 +8,14 @@
 
 [Full solution on Dominika's github](https://github.com/DominikaJanczyszyn/TaskApplication-Remote)
 
-<p>The exercise consists of 15 steps. Let's get started.</p>
+<p>The exercise consists of 5 steps. Let's get started.</p>
 
 ## Exercise
 
 <p>Below is a UML of the classes needed. Please note the UML diagram may not be complete, and you're welcome to add to it as is needed.</p>
 
-![image](https://github.com/OliwierWijas/OliwierWijas.github.io/assets/119060666/13dd760a-e702-4126-8f9a-7a7bf416047a)
+![image](![att HBdFkSIwjbgutmxhf049CmSU2R9zde8AbZHtblTXh7Y](https://github.com/OliwierWijas/OliwierWijas.github.io/assets/119060666/80341f95-e493-422e-8f8b-db542dad96f4)
+)
 
 ##### Before starting remember to keep track of the module-info.java file in order to include important libraries and to export proper packages if needed!
 
